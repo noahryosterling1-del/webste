@@ -1,0 +1,790 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090909">
+  <meta name="description" content="Dravix is your all-in-one premium Discord bot for moderation, automation, and community management.">
+  <title>Dravix — The Next Level of Discord</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #090909;
+      --surface: #111111;
+      --surface2: #171717;
+      --gold: #d6b36a;
+      --gold-light: #f0d99e;
+      --text: #f5f3ee;
+      --muted: #929292;
+      --border: rgba(214, 179, 106, .17);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    button { font: inherit; }
+
+    ::selection { background: var(--gold); color: #090909; }
+
+    .container { width: min(1120px, 90%); margin: auto; }
+
+    .navbar {
+      height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 5%;
+      background: rgba(9,9,9,.88);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,.055);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 23px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      color: #111;
+      background: linear-gradient(145deg, #f4dfaa, #b58b3c);
+      border-radius: 11px;
+      font-size: 21px;
+      box-shadow: 0 0 24px rgba(214,179,106,.12);
+    }
+
+    .brand span { color: var(--gold); }
+
+    .nav-links { display: flex; align-items: center; gap: 31px; }
+    .nav-links a { color: #aaa; font-size: 13px; transition: .2s; }
+    .nav-links a:hover { color: var(--gold-light); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border-radius: 8px;
+      padding: 13px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      transition: transform .2s, box-shadow .2s, background .2s;
+      cursor: pointer;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #efd99d, #c09a4e);
+      color: #111;
+      box-shadow: 0 5px 25px rgba(214,179,106,.1);
+    }
+
+    .btn-gold:hover { box-shadow: 0 7px 30px rgba(214,179,106,.25); }
+
+    .btn-outline {
+      background: rgba(255,255,255,.025);
+      border-color: #333;
+      color: #eee;
+    }
+
+    .btn-outline:hover { border-color: var(--gold); }
+
+    .menu-toggle {
+      display: none;
+      background: transparent;
+      border: 1px solid #333;
+      color: white;
+      padding: 9px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    /* HERO */
+
+    .hero {
+      position: relative;
+      min-height: 650px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, rgba(183,140,53,.13), transparent 68%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      background-size: 58px 58px;
+      mask-image: linear-gradient(to bottom, black, transparent 90%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      text-align: center;
+      padding: 95px 0 105px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--gold-light);
+      background: rgba(214,179,106,.055);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 9px 15px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 10px var(--gold);
+    }
+
+    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
+
+    .hero h1 {
+      font-size: clamp(52px, 9vw, 100px);
+      line-height: .98;
+      letter-spacing: -5px;
+      font-weight: 700;
+      margin-bottom: 25px;
+    }
+
+    .gold-text {
+      background: linear-gradient(110deg, #fff0c1, #d6b36a 48%, #927039);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-description {
+      max-width: 560px;
+      margin: 0 auto;
+      color: #999;
+      font-size: 15px;
+      line-height: 1.9;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 13px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    .hero-note {
+      margin-top: 35px;
+      font-size: 11px;
+      color: #686868;
+    }
+
+    .hero-note span { color: var(--gold); }
+
+    /* STATISTICS */
+
+    .stats { border-bottom: 1px solid #202020; background: #0c0c0c; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      padding: 27px 0;
+    }
+
+    .stat { text-align: center; padding: 12px; }
+    .stat + .stat { border-left: 1px solid #282828; }
+
+    .stat strong {
+      display: block;
+      font: 600 25px 'Space Grotesk', sans-serif;
+      color: var(--gold-light);
+      margin-bottom: 5px;
+    }
+
+    .stat span { font-size: 10px; color: #777; letter-spacing: 1.7px; }
+
+    /* SHARED SECTIONS */
+
+    section.content-section { padding: 105px 0; }
+
+    .section-heading { text-align: center; margin-bottom: 48px; }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(30px, 5vw, 46px);
+      letter-spacing: -1.5px;
+      margin-bottom: 15px;
+    }
+
+    .section-heading p {
+      max-width: 530px;
+      margin: auto;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    /* FEATURES */
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .feature-card {
+      padding: 28px;
+      background: linear-gradient(145deg, #141414, #0e0e0e);
+      border: 1px solid #252525;
+      border-radius: 13px;
+      transition: .25s;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(214,179,106,.48);
+      transform: translateY(-4px);
+      background: linear-gradient(145deg, #191710, #101010);
+    }
+
+    .feature-icon {
+      width: 45px;
+      height: 45px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: rgba(214,179,106,.07);
+      color: var(--gold-light);
+      font-size: 20px;
+      margin-bottom: 23px;
+    }
+
+    .feature-card h3 { font-size: 17px; margin-bottom: 11px; }
+    .feature-card p { color: #898989; font-size: 12px; line-height: 1.9; }
+
+    /* COMMANDS */
+
+    .commands-section { background: #0d0d0d; border-block: 1px solid #202020; }
+
+    .command-layout {
+      display: grid;
+      grid-template-columns: .85fr 1.15fr;
+      gap: 55px;
+      align-items: start;
+    }
+
+    .command-copy { padding-top: 20px; }
+    .command-copy h2 { font-size: 39px; line-height: 1.15; margin: 15px 0; }
+    .command-copy p { color: #909090; font-size: 13px; line-height: 1.9; margin-bottom: 25px; }
+
+    .command-box {
+      background: #101010;
+      border: 1px solid #292929;
+      border-radius: 13px;
+      overflow: hidden;
+    }
+
+    .command-top {
+      padding: 17px;
+      border-bottom: 1px solid #292929;
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .window-dot { width: 8px; height: 8px; border-radius: 50%; background: #444; }
+    .command-top span { margin-left: auto; font-size: 10px; color: #777; }
+
+    .search-wrap { padding: 15px; border-bottom: 1px solid #252525; }
+
+    .search-wrap input {
+      width: 100%;
+      background: #181818;
+      color: white;
+      border: 1px solid #303030;
+      outline: none;
+      border-radius: 7px;
+      padding: 12px;
+      font: inherit;
+      font-size: 12px;
+    }
+
+    .search-wrap input:focus { border-color: #a8894b; }
+
+    .command-list { padding: 6px 15px 15px; }
+
+    .command-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      padding: 15px 4px;
+      border-bottom: 1px solid #222;
+    }
+
+    .command-item:last-child { border-bottom: 0; }
+    .command-item strong { font: 500 13px monospace; color: var(--gold-light); }
+    .command-item p { font-size: 11px; color: #888; margin-top: 5px; }
+    .command-tag { font-size: 9px; color: #aaa; background: #222; padding: 5px 8px; border-radius: 5px; }
+    .empty-message { display: none; padding: 20px 4px; color: #888; font-size: 12px; }
+
+    /* SETUP */
+
+    .setup-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .setup-step {
+      position: relative;
+      padding: 28px;
+      border: 1px solid #292929;
+      background: #111;
+      border-radius: 12px;
+    }
+
+    .step-number {
+      font: 700 35px 'Space Grotesk', sans-serif;
+      color: #594a2b;
+      margin-bottom: 24px;
+    }
+
+    .setup-step h3 { font-size: 16px; margin-bottom: 10px; }
+    .setup-step p { font-size: 12px; color: #888; line-height: 1.9; }
+
+    /* CTA */
+
+    .cta-card {
+      text-align: center;
+      padding: 70px 25px;
+      border-radius: 17px;
+      border: 1px solid rgba(214,179,106,.28);
+      background:
+        radial-gradient(ellipse at top, rgba(214,179,106,.11), transparent 65%),
+        #101010;
+    }
+
+    .cta-card h2 { font-size: clamp(32px, 5vw, 48px); margin-bottom: 17px; }
+    .cta-card p { max-width: 470px; margin: 0 auto 27px; color: #999; font-size: 13px; line-height: 1.9; }
+
+    footer { border-top: 1px solid #222; padding: 27px 0; }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-inner p { font-size: 11px; color: #666; }
+    .footer-links { display: flex; gap: 20px; font-size: 11px; color: #888; }
+    .footer-links a:hover { color: var(--gold); }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    @media (max-width: 800px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 77px;
+        left: 0;
+        right: 0;
+        padding: 23px 5%;
+        background: #0d0d0d;
+        border-bottom: 1px solid #292929;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 22px;
+      }
+
+      .nav-links.open { display: flex; }
+      .nav-links .btn { align-self: flex-start; }
+      .menu-toggle { display: block; }
+
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .command-layout { grid-template-columns: 1fr; gap: 25px; }
+      .setup-grid { grid-template-columns: 1fr; }
+      .hero { min-height: 580px; }
+      section.content-section { padding: 75px 0; }
+    }
+
+    @media (max-width: 500px) {
+      .hero h1 { letter-spacing: -2.5px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .stat + .stat { border-left: 0; border-top: 1px solid #282828; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .brand { font-size: 20px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <a class="brand" href="#home" aria-label="Dravix home">
+      <span class="brand-icon">D</span>
+      DRA<span>VIX</span>
+    </a>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation"
+      aria-expanded="false">☰</button>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#features">Features</a>
+      <a href="#commands">Commands</a>
+      <a href="#setup">Getting started</a>
+      <a class="btn btn-gold" id="navInvite" href="#">Add to Discord ↗</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-grid"></div>
+      <div class="container hero-content">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> THE PREMIUM DISCORD EXPERIENCE</div>
+
+        <h1>YOUR SERVER.<br><span class="gold-text">YOUR RULES.</span></h1>
+
+        <p class="hero-description">
+          Meet Dravix. One powerful all-in-one Discord bot built
+          to keep your community organized, protected, and running smoothly.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-gold" id="heroInvite" href="#">✦ &nbsp; Invite Dravix</a>
+          <a class="btn btn-outline" href="#features">Explore features &nbsp; ↓</a>
+        </div>
+
+        <p class="hero-note"><span>◆</span> MODERATION &nbsp; · &nbsp; AUTOMATION &nbsp; · &nbsp; COMMUNITY</p>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Dravix overview">
+      <div class="container stats-grid">
+        <div class="stat">
+          <strong>ALL-IN-ONE</strong>
+          <span>ONE BOT, MORE POSSIBILITIES</span>
+        </div>
+        <div class="stat">
+          <strong>24 / 7*</strong>
+          <span>DESIGNED FOR YOUR COMMUNITY</span>
+        </div>
+        <div class="stat">
+          <strong>DRAVIX</strong>
+          <span>BUILT FOR DISCORD</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="features">
+      <div class="container">
+        <div class="section-heading reveal">
+          <div class="section-label">What we bring</div>
+          <h2>Everything. <span class="gold-text">One bot.</span></h2>
+          <p>Powerful community tools wrapped in one clean, easy-to-use experience.</p>
+        </div>
+
+        <div class="features-grid">
+          <article class="feature-card reveal">
+            <div class="feature-icon">⬡</div>
+            <h3>Smart Moderation</h3>
+            <p>Manage warnings, timeouts, kicks, and bans with moderation tools designed to help keep your server in check.</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <div class="feature-icon">⛨</div>
+            <h3>AutoMod Protection</h3>
+            <p>Help protect your community against spam, unwanted words, and disruptive messages with configurable filters.</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <div class="feature-icon">▤</div>
+            <h3>Ticket System</h3>
+            <p>Give members a straightforward way to contact your staff through organized support tickets.</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <div class="feature-icon">✦</div>
+            <h3>Welcome & Goodbye</h3>
+            <p>Welcome new members and send goodbye messages when people leave your community.</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <div class="feature-icon">◈</div>
+            <h3>Leveling & Rewards</h3>
+            <p>Give your community more reasons to participate with configurable experience and reward systems.</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <div class="feature-icon">⌘</div>
+            <h3>Custom Commands</h3>
+            <p>Build a more convenient server experience with utility commands and tools for your members and staff.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section commands-section" id="commands">
+      <div class="container command-layout">
+        <div class="command-copy reveal">
+          <div class="section-label">Command center</div>
+          <h2>Simple commands.<br><span class="gold-text">Serious control.</span></h2>
+          <p>
+            Find a command, check its purpose, and discover the tools
+            available in the Dravix command system.
+          </p>
+          <a class="btn btn-outline" href="#setup">Get started →</a>
+        </div>
+
+        <div class="command-box reveal">
+          <div class="command-top">
+            <i class="window-dot"></i><i class="window-dot"></i><i class="window-dot"></i>
+            <span>DRAVIX / COMMANDS</span>
+          </div>
+
+          <div class="search-wrap">
+            <input id="commandSearch" type="search" placeholder="Search commands..." aria-label="Search commands">
+          </div>
+
+          <div class="command-list" id="commandList">
+            <div class="command-item" data-search="help information utility">
+              <div><strong>/help</strong><p>View available bot commands</p></div>
+              <span class="command-tag">UTILITY</span>
+            </div>
+            <div class="command-item" data-search="ping latency status utility">
+              <div><strong>/ping</strong><p>Check bot response latency</p></div>
+              <span class="command-tag">UTILITY</span>
+            </div>
+            <div class="command-item" data-search="warn moderation staff">
+              <div><strong>/warn</strong><p>Issue a moderation warning</p></div>
+              <span class="command-tag">MODERATION</span>
+            </div>
+            <div class="command-item" data-search="timeout mute moderation staff">
+              <div><strong>/timeout</strong><p>Temporarily restrict a member</p></div>
+              <span class="command-tag">MODERATION</span>
+            </div>
+            <div class="command-item" data-search="ticket support staff">
+              <div><strong>/ticket</strong><p>Access community support tools</p></div>
+              <span class="command-tag">SUPPORT</span>
+            </div>
+            <div class="command-item" data-search="userinfo member information utility">
+              <div><strong>/userinfo</strong><p>View member information</p></div>
+              <span class="command-tag">UTILITY</span>
+            </div>
+            <p class="empty-message" id="emptyMessage">No matching commands found.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="setup">
+      <div class="container">
+        <div class="section-heading reveal">
+          <div class="section-label">Getting started</div>
+          <h2>Three steps to <span class="gold-text">Dravix.</span></h2>
+          <p>Bring the Dravix experience to your Discord community.</p>
+        </div>
+
+        <div class="setup-grid">
+          <article class="setup-step reveal">
+            <div class="step-number">01</div>
+            <h3>Invite the bot</h3>
+            <p>Use the official Discord invite and select the server where you have permission to add bots.</p>
+          </article>
+
+          <article class="setup-step reveal">
+            <div class="step-number">02</div>
+            <h3>Configure your server</h3>
+            <p>Set up the features, channels, permissions, and moderation options your community needs.</p>
+          </article>
+
+          <article class="setup-step reveal">
+            <div class="step-number">03</div>
+            <h3>You're ready</h3>
+            <p>Use the commands supported by your installed Dravix bot and manage your community.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="container">
+        <div class="cta-card reveal">
+          <div class="section-label">Your community deserves better</div>
+          <h2>Ready for <span class="gold-text">Dravix?</span></h2>
+          <p>
+            Make moderation easier, organize your community, and bring
+            your server tools together in one place.
+          </p>
+          <a class="btn btn-gold" id="bottomInvite" href="#">Add Dravix to Discord ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <a class="brand" href="#home">
+        <span class="brand-icon">D</span>
+        DRA<span>VIX</span>
+      </a>
+      <p>© <span id="year"></span> Dravix. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#commands">Commands</a>
+        <a href="#" id="supportLink">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /*
+      DRAVIX WEBSITE CONFIGURATION
+      Replace these URLs with your real Discord links.
+    */
+    const CONFIG = {
+      inviteUrl: "https://discord.com/oauth2/authorize?client_id=YOUR_BOT_ID&permissions=0&scope=bot%20applications.commands",
+      supportUrl: "https://discord.gg/YOUR_INVITE"
+    };
+
+    // Set invite and support links.
+    ["navInvite", "heroInvite", "bottomInvite"].forEach(id => {
+      document.getElementById(id).href = CONFIG.inviteUrl;
+    });
+
+    document.getElementById("supportLink").href = CONFIG.supportUrl;
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Mobile navigation.
+    const menuToggle = document.getElementById("menuToggle");
+    const navLinks = document.getElementById("navLinks");
+
+    menuToggle.addEventListener("click", () => {
+      const open = navLinks.classList.toggle("open");
+      menuToggle.setAttribute("aria-expanded", String(open));
+      menuToggle.textContent = open ? "✕" : "☰";
+    });
+
+    navLinks.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.textContent = "☰";
+      });
+    });
+
+    // Live command search.
+    const searchInput = document.getElementById("commandSearch");
+    const commandItems = document.querySelectorAll(".command-item");
+    const emptyMessage = document.getElementById("emptyMessage");
+
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.toLowerCase().trim();
+      let visible = 0;
+
+      commandItems.forEach(item => {
+        const text = (item.innerText + " " + item.dataset.search).toLowerCase();
+        const matches = text.includes(query);
+        item.style.display = matches ? "flex" : "none";
+        if (matches) visible++;
+      });
+
+      emptyMessage.style.display = visible ? "none" : "block";
+    });
+
+    // Reveal sections as they enter the viewport.
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+    } else {
+      document.querySelectorAll(".reveal").forEach(el => el.classList.add("visible"));
+    }
+  </script>
+</body>
+</html>
